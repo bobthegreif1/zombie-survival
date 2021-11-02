@@ -1,8 +1,12 @@
 function addZombie () {
     zombieNumber = randint(0, zombieImgs.length - 1)
-    zombie2 = sprites.create(zombieImgs[zombieNumber], SpriteKind.Enemy)
-    zombie2.follow(oldLady, 15)
-    tiles.placeOnRandomTile(zombie2, sprites.castle.tilePath5)
+    zombie = sprites.create(zombieImgs[zombieNumber], SpriteKind.Enemy)
+    zombie.follow(oldLady, 15)
+    tiles.placeOnRandomTile(zombie, sprites.castle.tilePath5)
+    leftImg = zombieImgs[zombieNumber].clone()
+    leftImg.flipX()
+    sprites.setDataImage(zombie, "costume-right", zombieImgs[zombieNumber])
+sprites.setDataImage(zombie, "costume-left", leftImg)
 }
 info.onCountdownEnd(function () {
     wave = wave + 1
@@ -39,11 +43,13 @@ let randomSaying = ""
 let randomSayingNumber = 0
 let randomZombie: Sprite = null
 let randomZombieNumber = 0
-let zombie: Sprite[] = []
-let zombie2: Sprite = null
-let zombieNumber = 0
-let zombieImgs: Image[] = []
+let zombie2: Sprite[] = []
+let zombies: Sprite[] = []
+let leftImg: Image = null
+let zombie: Sprite = null
 let wave = 0
+let zombieImgs: Image[] = []
+let zombieNumber = 0
 wave = 1
 zombieImgs = [
 img`
@@ -360,11 +366,21 @@ let zombieSayings = [
 scene.setBackgroundColor(7)
 tiles.setTilemap(tilemap`level_1`)
 nextWave()
+game.onUpdate(function () {
+    zombies = sprites.allOfKind(SpriteKind.Enemy)
+    for (let z of zombies) {
+        if (z.vx > 0) {
+        	
+        } else {
+        	
+        }
+    }
+})
 game.onUpdateInterval(1000, function () {
-    zombie = sprites.allOfKind(SpriteKind.Enemy)
-    randomZombieNumber = randint(0, zombie.length - 1)
-    randomZombie = zombie[randomZombieNumber]
+    zombie2 = sprites.allOfKind(SpriteKind.Enemy)
+    randomZombieNumber = randint(0, zombie2.length - 1)
+    randomZombie = zombie2[randomZombieNumber]
     randomSayingNumber = randint(0, zombieSayings.length - 1)
     randomSaying = zombieSayings[randomSayingNumber]
-    randomZombie.say(randomSaying, 3000 )
+    randomZombie.say(randomSaying, 3000)
 })
